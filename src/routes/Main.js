@@ -15,14 +15,13 @@ const Main = () => {
   }, []);
 
   const dictList = useSelector((state) => state.dictionary.list);
-
   return (
     <>
       <FloatingBtn />
       <MainContainer>
         {dictList[0] === undefined ? (
           <h1>
-            <TypeIt>로딩..........</TypeIt>
+            <TypeIt>로딩 중......</TypeIt>
           </h1>
         ) : (
           dictList.map((word) => {

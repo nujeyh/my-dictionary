@@ -15,9 +15,6 @@ const Header = () => {
 
 const HeaderWrap = styled.header`
   text-align: center;
-  hr {
-    margin: 10px 0 20px 0;
-  }
 `;
 
 export default Header;

@@ -39,6 +39,7 @@ const FloatingWrap = styled.div`
   position: fixed;
   bottom: 10px;
   right: 10px;
+  z-index: 1;
   div {
     margin-bottom: 5px;
   }
