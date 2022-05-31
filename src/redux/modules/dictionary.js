@@ -42,7 +42,7 @@ export function isLoaded(loaded) {
   return { type: LOADED, loaded };
 }
 
-// 비동기 통신을 도와주는 미들웨어
+// Middleware
 // action -> middleware -> reducer로 데이터 수정 단계가 추가된다.
 // redux-thunk
 // 객체 대신 함수를 생성하는 액션 생성 함수를 작성할 수 있게 해준다.
@@ -50,30 +50,38 @@ export function isLoaded(loaded) {
 // 발생하기 전에 조건을 주거나, 어떤 행동을 사전에 처리할 수 있다.
 export const loadDictFB = () => {
   return async function (dispatch) {
+    // db에서 데이터를 받아온다.
     const DictData = await getDocs(collection(db, "dictionary"));
 
     let dictionary = [];
 
+    // store에 state를 추가하기 위해 데이터에 id를 포함한다.
     DictData.forEach((data) => {
       dictionary.push({ id: data.id, ...data.data() });
     });
+
+    // 만든 데이터로 dispatch 한다
     dispatch(loadDict(dictionary));
   };
 };
 
 export const createDictFB = (dictionary) => {
   return async function (dispatch) {
-    // Word 컴포넌트에서 받은 값 firebase에 추가
+    // UpdateWord 컴포넌트에서 받은 값을 firebase에 추가한다.
     const docRef = await addDoc(collection(db, "dictionary"), dictionary);
+
+    // redux dispatch
     dispatch(createDict({ id: docRef.id, ...dictionary }));
   };
 };
 
 export const deleteDictFB = (wordId) => {
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
+    // firebase에서 데이터를 삭제한다.
     const docRef = doc(db, "dictionary", wordId);
     await deleteDoc(docRef);
 
+    // redux dispatch
     dispatch(deleteDict(wordId));
   };
 };
@@ -81,30 +89,31 @@ export const deleteDictFB = (wordId) => {
 export const updateDictFB = (dictionary) => {
   return async function (dispatch, getState) {
     const docRef = doc(db, "dictionary", dictionary.id);
+
     dispatch(isLoaded(false));
 
+    // firebase 데이터 업데이트
     await updateDoc(docRef, {
       word: dictionary.word,
       meaning: dictionary.meaning,
       example: dictionary.example,
       translation: dictionary.translation,
     });
-    console.log("파베업뎃 완료");
 
+    // store의 현재 state와 같은 id도 수정한다
     const _dictionary = getState().dictionary.list;
     const dictIndex = _dictionary.findIndex((item) => {
       return item.id === dictionary.id;
     });
-    console.log("dictIndex", dictIndex);
+
     dispatch(updateDict(dictIndex));
   };
 };
 
-// Reducer
+//----------------- Reducer -----------------
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case "dictionary/LOAD": {
-      console.log("리듀서 로드 중");
       return { list: action.dictionary, isLoaded: false };
     }
     case "dictionary/CREATE": {
@@ -113,6 +122,7 @@ export default function reducer(state = initialState, action = {}) {
     }
 
     case "dictionary/DELETE": {
+      // 삭제할 값만 제외하고 list를 다시 만든다.
       const newDictionary = state.list.filter((item) => {
         return action.wordId !== item.id;
       });
@@ -121,7 +131,6 @@ export default function reducer(state = initialState, action = {}) {
 
     case "dictionary/UPDATE": {
       const newDictionary = state.list.map((item, index) => {
-        console.log("리듀서 업뎃 중");
         if (parseInt(action.dictIndex) === index) {
           return { ...item };
         } else {
