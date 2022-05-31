@@ -1,6 +1,10 @@
 import React, { useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import { createDictFB, updateDictFB } from "../redux/modules/dictionary";
 
@@ -16,7 +20,6 @@ const UpdateWord = () => {
   const translation = useRef("");
 
   const wordId = useParams();
-  // const isLoaded = useSelector((state) => state.dictionary.isLoaded);
 
   const isBlank = () => {
     if (
@@ -27,7 +30,13 @@ const UpdateWord = () => {
         translation.current.value
       )
     ) {
-      window.alert("입력안한거있음");
+      console.log(
+        word.current.value,
+        meaning.current.value,
+        example.current.value,
+        translation.current.value
+      );
+      window.alert("입력하지 않은 항목이 있어요😢");
       return true;
     }
   };
@@ -43,7 +52,7 @@ const UpdateWord = () => {
       })
     );
 
-    navigate("/");
+    setTimeout(() => navigate("/"), 1000);
   };
 
   const updateDict = () => {
@@ -62,51 +71,101 @@ const UpdateWord = () => {
     navigate("/");
   };
 
+  // 파라미터에 따라 다른 컴포넌트 노출
   return (
-    <div>
-      <h2>{wordId.id === "new" ? "새로운 단어 만들기" : "단어 수정하기"}</h2>
-      <div>
-        <span>단어</span>
-        <input
-          ref={word}
-          type="text"
-          defaultValue={wordId.id === "new" ? "" : location.state.word}
-        />
-      </div>
-      <div>
-        <span>의미</span>
-        <input
-          ref={meaning}
-          type="text"
-          defaultValue={wordId.id === "new" ? "" : location.state.meaning}
-        />
-      </div>
-      <div>
-        <span>예문</span>
-        <input
-          ref={example}
-          type="text"
-          defaultValue={wordId.id === "new" ? "" : location.state.example}
-        />
-      </div>
-      <div>
-        <span>해석</span>
-        <input
-          ref={translation}
-          type="text"
-          defaultValue={wordId.id === "new" ? "" : location.state.translation}
-        />
-      </div>
-
-      {wordId.id === "new" ? (
-        <button onClick={createDict}>추가하기</button>
-      ) : (
-        <button onClick={updateDict}>수정하기</button>
-      )}
-
-      <button onClick={() => navigate("/")}>뒤로가기</button>
-    </div>
+    <>
+      <Container>
+        <h2>{wordId.id === "new" ? "새로운 단어 만들기" : "단어 수정하기"}</h2>
+        <div>
+          <TextField
+            fullWidth
+            autoComplete="off"
+            id="outlined-basic"
+            label="단어"
+            variant="outlined"
+            inputRef={word}
+            type="text"
+            defaultValue={wordId.id === "new" ? "" : location.state.word}
+          />
+        </div>
+        <div>
+          <TextField
+            fullWidth
+            autoComplete="off"
+            id="outlined-basic"
+            label="뜻"
+            variant="outlined"
+            inputRef={meaning}
+            type="text"
+            defaultValue={wordId.id === "new" ? "" : location.state.meaning}
+          />
+        </div>
+        <div>
+          <TextField
+            multiline
+            rows={3}
+            fullWidth
+            autoComplete="off"
+            id="outlined-basic"
+            label="예문"
+            variant="outlined"
+            inputRef={example}
+            type="text"
+            defaultValue={wordId.id === "new" ? "" : location.state.example}
+          />
+        </div>
+        <div>
+          <TextField
+            multiline
+            rows={3}
+            fullWidth
+            autoComplete="off"
+            id="outlined-basic"
+            label="해석"
+            variant="outlined"
+            inputRef={translation}
+            type="text"
+            defaultValue={wordId.id === "new" ? "" : location.state.translation}
+          />
+        </div>
+      </Container>
+      <BtnContainer>
+        {wordId.id === "new" ? (
+          <Button variant="contained" onClick={createDict}>
+            추가하기
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={updateDict}>
+            수정하기
+          </Button>
+        )}
+        <Button variant="outlined" onClick={() => navigate("/")}>
+          뒤로가기
+        </Button>
+      </BtnContainer>
+    </>
   );
 };
 
+const Container = styled.div`
+  width: 45%;
+  min-width: 350px;
+  height: 480px;
+  margin: auto;
+
+  text-align: center;
+  display: flex;
+  flex-flow: column;
+  /* align-items: center; */
+  justify-content: space-around;
+`;
+const BtnContainer = styled.div`
+  width: 400px;
+  margin: auto;
+  text-align: center;
+
+  button {
+    margin: 10px 5px;
+  }
+`;
 export default UpdateWord;
