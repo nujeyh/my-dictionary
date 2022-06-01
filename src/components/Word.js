@@ -33,7 +33,7 @@ const Word = ({ wordObj }) => {
       <WordCard completed={wordObj.completed} deleted={deleted}>
         <h2>{wordObj.word}</h2>
         <p>{wordObj.meaning}</p>
-        <p className="exText" style={{ marginBottom: "-15px" }}>
+        <p className="exText" style={{ marginBottom: "-10px" }}>
           {wordObj.example}
         </p>
         <p className="exText">{wordObj.translation}</p>
@@ -75,9 +75,9 @@ const Word = ({ wordObj }) => {
 };
 const WordCard = styled.div`
   min-width: 280px;
-  width: calc(40% - 10px);
-  margin: 20px auto 0 auto;
-  padding: 0.5px 20px 0 20px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0.5px 17px 10px 17px;
 
   /* order: ${(prop) => (prop.completed ? 1 : 0)}; */
 

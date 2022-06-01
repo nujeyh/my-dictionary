@@ -39,6 +39,9 @@ const Header = () => {
 
 const HeaderWrap = styled.header`
   text-align: center;
+  hr {
+    margin-bottom: 25px;
+  }
 `;
 
 export default Header;
