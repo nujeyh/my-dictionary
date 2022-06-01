@@ -13,6 +13,7 @@ const LOAD = "dictionary/LOAD";
 const CREATE = "dictionary/CREATE";
 const DELETE = "dictionary/DELETE";
 const UPDATE = "dictionary/UPDATE";
+const COMPLETE = "dictionary/COMPLETE";
 const LOADED = "dictionary/LOADED";
 
 // 초기값 설정
@@ -36,6 +37,10 @@ export function deleteDict(wordId) {
 
 export function updateDict(dictIndex) {
   return { type: UPDATE, dictIndex };
+}
+
+export function completeDict(dictIndex) {
+  return { type: COMPLETE, dictIndex };
 }
 
 export function isLoaded(loaded) {
@@ -110,6 +115,25 @@ export const updateDictFB = (dictionary) => {
   };
 };
 
+export const completeDictFB = (dictionary) => {
+  return async function (dispatch, getState) {
+    const docRef = doc(db, "dictionary", dictionary.id);
+
+    if (dictionary.completed === false) {
+      await updateDoc(docRef, { completed: true });
+    } else {
+      await updateDoc(docRef, { completed: false });
+    }
+
+    const _dictionary = getState().dictionary.list;
+    const dictIndex = _dictionary.findIndex((item) => {
+      return item.id === dictionary.id;
+    });
+
+    dispatch(completeDict(dictIndex));
+  };
+};
+
 //----------------- Reducer -----------------
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -138,6 +162,22 @@ export default function reducer(state = initialState, action = {}) {
         }
       });
       return { ...state, list: newDictionary, isLoaded: true };
+    }
+
+    case "dictionary/COMPLETE": {
+      const newDictionary = state.list.map((item, index) => {
+        if (parseInt(action.dictIndex) === index && item.completed === false) {
+          return { ...item, completed: true };
+        } else if (
+          parseInt(action.dictIndex) === index &&
+          item.completed === true
+        ) {
+          return { ...item, completed: false };
+        } else {
+          return item;
+        }
+      });
+      return { ...state, list: newDictionary };
     }
 
     case "dictionary/LOADED": {

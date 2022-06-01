@@ -49,6 +49,7 @@ const UpdateWord = () => {
         meaning: meaning.current.value,
         example: example.current.value,
         translation: translation.current.value,
+        completed: false,
       })
     );
 
@@ -68,7 +69,7 @@ const UpdateWord = () => {
       })
     );
 
-    navigate("/");
+    setTimeout(() => navigate("/"), 1000);
   };
 
   // 파라미터에 따라 다른 컴포넌트 노출
