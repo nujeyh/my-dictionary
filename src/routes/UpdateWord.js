@@ -53,7 +53,7 @@ const UpdateWord = () => {
       })
     );
 
-    setTimeout(() => navigate("/"), 1000);
+    setTimeout(() => navigate("/"), 700);
   };
 
   const updateDict = () => {
@@ -69,7 +69,7 @@ const UpdateWord = () => {
       })
     );
 
-    setTimeout(() => navigate("/"), 1000);
+    setTimeout(() => navigate("/"), 700);
   };
 
   // 파라미터에 따라 다른 컴포넌트 노출
