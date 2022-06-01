@@ -34,10 +34,10 @@ const Main = () => {
 };
 
 const MainContainer = styled.div`
-  width: calc(90% - 10px);
-  margin: auto;
-  display: flex;
-  flex-wrap: wrap;
+  margin: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 25px;
 `;
 
 export default Main;
