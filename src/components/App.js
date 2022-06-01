@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import Main from "../routes/Main";
 import UpdateWord from "../routes/UpdateWord";
+import Footer from "./Footer";
 
 import Header from "./Header";
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/word/:id" element={<UpdateWord />} />
         <Route path="*" element={<h2>⛔️ !잘못된 주소에요! ⛔️</h2>} />
       </Routes>
+      <Footer />
     </AppWrap>
   );
 }
