@@ -3,12 +3,10 @@ import styled from "styled-components";
 
 const Footer = () => {
   return (
-    <>
-      <FooterWrap>
-        <hr />
-        <p>&copy; {new Date().getFullYear()} 🌈 Hyejun. All rights reserved.</p>
-      </FooterWrap>
-    </>
+    <FooterWrap>
+      <hr />
+      <p>&copy; {new Date().getFullYear()} 🌈 Hyejun.</p>
+    </FooterWrap>
   );
 };
 
