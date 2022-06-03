@@ -11,11 +11,12 @@ import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import CheckCircleOutlineRoundedIcon from "@mui/icons-material/CheckCircleOutlineRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
+// 단어 카드 컴포넌트
 const Word = ({ wordObj }) => {
+  // CSS용 state
   const [deleted, setDeleted] = useState(false);
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   // 단어 삭제하기
@@ -24,53 +25,62 @@ const Word = ({ wordObj }) => {
     setTimeout(() => dispatch(deleteDictFB(wordObj.id)), 300);
   };
 
+  // 완료 상태 바꾸기
   const onClickComplete = () => {
     dispatch(completeDictFB(wordObj));
   };
 
+  // 단어 작성일 만들기
+  const milliSeconds = wordObj.createdAt.toDate();
+  const day = milliSeconds.getDate();
+  const month = milliSeconds.getMonth() + 1;
+  const year = milliSeconds.getFullYear();
+
   return (
-    <>
-      <WordCard completed={wordObj.completed} deleted={deleted}>
-        <h2>{wordObj.word}</h2>
-        <p>{wordObj.meaning}</p>
-        <p className="exText" style={{ marginBottom: "-10px" }}>
-          {wordObj.example}
-        </p>
-        <p className="exText">{wordObj.translation}</p>
-        <BtnContainer>
-          <IconButton sx={{ m: "-3px" }} onClick={onClickComplete}>
-            {wordObj.completed ? (
-              <CheckCircleRoundedIcon color="primary" />
-            ) : (
-              <CheckCircleOutlineRoundedIcon />
-            )}
-          </IconButton>
+    <WordCard completed={wordObj.completed} deleted={deleted}>
+      <h2>{wordObj.word}</h2> {/* 단어 */}
+      <p>{wordObj.meaning}</p> {/* 의미 */}
+      <p className="exText" style={{ marginBottom: "-10px" }}>
+        {wordObj.example} {/* 예문 */}
+      </p>
+      <p className="exText" style={{ marginBottom: "30px" }}>
+        {wordObj.translation} {/* 해석 */}
+      </p>
+      <p className="date">{`${year}.${month}.${day}`}</p> {/* 작성일 */}
+      {/* 완료 버튼 */}
+      <BtnContainer>
+        <IconButton sx={{ m: "-3px" }} onClick={onClickComplete}>
+          {wordObj.completed ? (
+            <CheckCircleRoundedIcon color="primary" />
+          ) : (
+            <CheckCircleOutlineRoundedIcon />
+          )}
+        </IconButton>
 
-          {/* 수정하기 버튼
+        {/* 수정하기 버튼
         클릭 시 수정 페이지로 이동되며, 아래 속성도 넘겨줌 */}
-          <IconButton
-            sx={{ m: "-3px" }}
-            color="primary"
-            onClick={() =>
-              navigate("/word/" + wordObj.id, {
-                state: {
-                  word: wordObj.word,
-                  meaning: wordObj.meaning,
-                  example: wordObj.example,
-                  translation: wordObj.translation,
-                },
-              })
-            }
-          >
-            <BorderColorRoundedIcon />
-          </IconButton>
+        <IconButton
+          sx={{ m: "-3px" }}
+          color="primary"
+          onClick={() =>
+            navigate("/word/" + wordObj.id, {
+              state: {
+                word: wordObj.word,
+                meaning: wordObj.meaning,
+                example: wordObj.example,
+                translation: wordObj.translation,
+              },
+            })
+          }
+        >
+          <BorderColorRoundedIcon />
+        </IconButton>
 
-          <IconButton sx={{ m: "-3px" }} onClick={onClickDelete}>
-            <DeleteForeverRoundedIcon />
-          </IconButton>
-        </BtnContainer>
-      </WordCard>
-    </>
+        <IconButton sx={{ m: "-3px" }} onClick={onClickDelete}>
+          <DeleteForeverRoundedIcon />
+        </IconButton>
+      </BtnContainer>
+    </WordCard>
   );
 };
 const WordCard = styled.div`
@@ -101,11 +111,19 @@ const WordCard = styled.div`
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
       rgba(0, 0, 0, 0.22) 0px 10px 10px;
   }
+
+  .date {
+    font-size: small;
+    color: #7b7b7b;
+    position: absolute;
+    bottom: 0px;
+    right: 20px;
+  }
 `;
 
 const BtnContainer = styled.div`
   position: absolute;
-  top: 22px;
+  top: 13px;
   right: 10px;
 `;
 export default Word;
