@@ -22,10 +22,6 @@ const Header = () => {
               .pause(3000)
               .delete(2)
               .pause(2000)
-              .type("vorweg")
-              .pause(3000)
-              .delete(6)
-              .pause(2000)
               .type("사전");
 
             return instance;
