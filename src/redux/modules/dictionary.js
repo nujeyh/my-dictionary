@@ -6,9 +6,11 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
-// Actions
+// -----------------Actions-----------------
 const LOAD = "dictionary/LOAD";
 const CREATE = "dictionary/CREATE";
 const DELETE = "dictionary/DELETE";
@@ -22,7 +24,7 @@ const initialState = {
   list: [],
 };
 
-// Action Creator
+// -----------------Action Creator-----------------
 export function loadDict(dictionary) {
   return { type: LOAD, dictionary };
 }
@@ -47,16 +49,17 @@ export function isLoaded(loaded) {
   return { type: LOADED, loaded };
 }
 
-// Middleware
-// action -> middleware -> reducer로 데이터 수정 단계가 추가된다.
-// redux-thunk
-// 객체 대신 함수를 생성하는 액션 생성 함수를 작성할 수 있게 해준다.
-// 리덕스는 action 객체를 dispatch하기 때문에 함수를 생성하면 특정 액션이
-// 발생하기 전에 조건을 주거나, 어떤 행동을 사전에 처리할 수 있다.
+// -----------------Middleware-----------------
+
+// 파이어베이스에서 데이터 불러오기
 export const loadDictFB = () => {
   return async function (dispatch) {
     // db에서 데이터를 받아온다.
-    const DictData = await getDocs(collection(db, "dictionary"));
+    let newQuery = query(
+      collection(db, "dictionary"),
+      orderBy("createdAt", "desc")
+    );
+    const DictData = await getDocs(newQuery);
 
     let dictionary = [];
 
@@ -70,6 +73,7 @@ export const loadDictFB = () => {
   };
 };
 
+// 파이어베이스에 데이터 추가하기
 export const createDictFB = (dictionary) => {
   return async function (dispatch) {
     // UpdateWord 컴포넌트에서 받은 값을 firebase에 추가한다.
@@ -80,6 +84,7 @@ export const createDictFB = (dictionary) => {
   };
 };
 
+// 파이어베이스 데이터 삭제하기
 export const deleteDictFB = (wordId) => {
   return async function (dispatch) {
     // firebase에서 데이터를 삭제한다.
@@ -91,6 +96,7 @@ export const deleteDictFB = (wordId) => {
   };
 };
 
+// 파이어베이스 데이터 수정하기
 export const updateDictFB = (dictionary) => {
   return async function (dispatch, getState) {
     const docRef = doc(db, "dictionary", dictionary.id);
@@ -115,6 +121,7 @@ export const updateDictFB = (dictionary) => {
   };
 };
 
+// 파이어베이스 완료 상태 수정하기
 export const completeDictFB = (dictionary) => {
   return async function (dispatch, getState) {
     const docRef = doc(db, "dictionary", dictionary.id);
