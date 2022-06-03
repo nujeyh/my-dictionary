@@ -8,6 +8,7 @@ import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import { motion } from "framer-motion";
 
+// 오른쪽 하단 추가/위로 버튼
 const FloatingBtn = () => {
   const navigate = useNavigate();
 
