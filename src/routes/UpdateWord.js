@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { createDictFB, updateDictFB } from "../redux/modules/dictionary";
+import { serverTimestamp } from "firebase/firestore";
 import styled from "styled-components";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
-import { createDictFB, updateDictFB } from "../redux/modules/dictionary";
 
 const UpdateWord = () => {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const UpdateWord = () => {
 
   const wordId = useParams();
 
+  // 빈칸 있는지 확인하기
   const isBlank = () => {
     if (
       !(
@@ -30,17 +31,12 @@ const UpdateWord = () => {
         translation.current.value
       )
     ) {
-      console.log(
-        word.current.value,
-        meaning.current.value,
-        example.current.value,
-        translation.current.value
-      );
       window.alert("입력하지 않은 항목이 있어요😢");
       return true;
     }
   };
 
+  // 새 단어 만들기
   const createDict = () => {
     if (isBlank() === true) return;
     dispatch(
@@ -50,12 +46,14 @@ const UpdateWord = () => {
         example: example.current.value,
         translation: translation.current.value,
         completed: false,
+        createdAt: serverTimestamp(),
       })
     );
 
     setTimeout(() => navigate("/"), 700);
   };
 
+  // 단어 수정하기
   const updateDict = () => {
     if (isBlank() === true) return;
 
@@ -72,7 +70,7 @@ const UpdateWord = () => {
     setTimeout(() => navigate("/"), 700);
   };
 
-  // 파라미터에 따라 다른 컴포넌트 노출
+  // url에 따라 다른 컴포넌트 노출
   return (
     <>
       <Container>
@@ -157,7 +155,6 @@ const Container = styled.div`
   text-align: center;
   display: flex;
   flex-flow: column;
-  /* align-items: center; */
   justify-content: space-around;
 `;
 const BtnContainer = styled.div`
