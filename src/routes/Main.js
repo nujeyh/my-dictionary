@@ -10,6 +10,7 @@ import Word from "../components/Word";
 const Main = () => {
   const dispatch = useDispatch();
 
+  // 파이어 베이스 -> 리덕스 데이터 불러오기
   useEffect(() => {
     dispatch(loadDictFB());
   }, []);
@@ -33,6 +34,7 @@ const Main = () => {
   );
 };
 
+// grid로 반응형 페이지 만들기
 const MainContainer = styled.div`
   margin: 0 20px;
   display: grid;
