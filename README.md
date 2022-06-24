@@ -17,3 +17,10 @@
     - [x] 게시글 삭제하기
     - [x] 완료 상태 추가하기
     - [x] 반응형으로 만들기
+    - [x] 소소한 애니메이션 
+
+## 화면
+<img src=https://user-images.githubusercontent.com/102746846/175554831-5c4f0293-30bb-4429-9850-2758cce4fc94.png >
+<img src=https://user-images.githubusercontent.com/102746846/175554867-8972dcf7-7bc5-4bb0-88d0-460ab900642c.png height=500>
+<img src=https://user-images.githubusercontent.com/102746846/175554884-44521388-9fe1-407c-8aba-f321750981d9.png height=500>
+
